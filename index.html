@@ -3,21 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dhanushaaaa ✨</title>
+<title>For Dhanushaaaa ✨</title>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
     body { margin: 0; padding: 0; overflow: hidden; background: #000; font-family: 'Poppins', sans-serif; color: #fff; text-align: center; width: 100vw; height: 100vh; }
-    
-    /* Particles in the very front */
     canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1000; }
-
     .scene { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; top: 0; left: 0; z-index: 10; }
     .active { display: flex !important; }
+    .title { font-size: clamp(35px, 8vw, 65px); font-family: 'Great Vibes', cursive; background: linear-gradient(45deg,#ff5cc8,#ffd65c,#5ce1ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; z-index: 100; margin: 10px; position: relative; }
 
-    .title { font-size: clamp(40px, 10vw, 75px); font-family: 'Great Vibes', cursive; background: linear-gradient(45deg,#ff5cc8,#ffd65c,#5ce1ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; z-index: 100; margin: 10px; position: relative; }
-
-    /* --- BEAUTIFUL TEDDY --- */
     #teddyPrank { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(0.8); z-index: 300; display: none; }
     .t-ear { width: 45px; height: 45px; background: #d4a373; border-radius: 50%; position: absolute; top: -5px; border: 2px solid #bc8a5f; }
     .t-head { width: 120px; height: 105px; background: #eacda3; border-radius: 50% 50% 45% 45%; position: relative; z-index: 2; border: 2px solid #d4a373; }
@@ -25,11 +20,10 @@
     .t-body { width: 130px; height: 110px; background: #eacda3; border-radius: 42%; margin-top: -25px; position: relative; z-index: 1; border: 2px solid #d4a373; }
     #gunIcon { position: absolute; right: -35px; bottom: 30px; font-size: 50px; filter: drop-shadow(0 0 10px red); }
 
-    /* --- FINALE & GLOW --- */
     .finale-container { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .img-10-bg { position: absolute; width: 200px; height: auto; z-index: 1; opacity: 0; transition: opacity 3s; top: 45%; left: 50%; transform: translate(-50%, -50%); border-radius: 15px; }
-    .img-9-behind { position: absolute; bottom: 5%; width: 320px; height: 200px; object-fit: cover; border: 3px solid #ffd65c; border-radius: 15px; z-index: 40; opacity: 0; transition: opacity 1.5s; filter: brightness(0.7); }
-    .finale-text-block { position: absolute; bottom: 8%; width: 100%; z-index: 100; pointer-events: none; }
+    .img-9-behind { position: absolute; bottom: 15%; width: 280px; height: 180px; object-fit: cover; border: 3px solid #ffd65c; border-radius: 15px; z-index: 40; opacity: 0; transition: opacity 1.5s; filter: brightness(0.7); }
+    .finale-text-block { position: absolute; bottom: 5%; width: 100%; z-index: 100; pointer-events: none; }
 
     @keyframes photoGlow {
         0% { box-shadow: 0 0 10px rgba(255,255,255,0.3); }
@@ -37,66 +31,23 @@
         100% { box-shadow: 0 0 10px rgba(255,255,255,0.3); }
     }
 
-    .collage-img { position: absolute; width: 100px; height: 100px; object-fit: cover; border: 3px solid white; border-radius: 10px; z-index: 20; opacity: 0; transition: opacity 2s; animation: photoGlow 3s infinite ease-in-out; }
-    #mainImg { max-width: 80%; max-height: 70%; border: 8px solid white; border-radius: 15px; transition: opacity 1s; animation: photoGlow 4s infinite ease-in-out; }
-
-    .btn-row { display: flex; flex-direction: row; gap: 50px; margin-top: 30px; z-index: 200; position: relative; justify-content: center; }
-    .btn { padding: 15px 45px; font-size: 20px; border: none; border-radius: 35px; cursor: pointer; font-weight: bold; }
-
-    @keyframes slice { 0% { transform: rotate(-45deg) translate(0, 0); } 100% { transform: rotate(-45deg) translate(-150px, 100px); } }
+    .collage-img { position: absolute; width: 80px; height: 80px; object-fit: cover; border: 2px solid white; border-radius: 8px; z-index: 20; opacity: 0; transition: opacity 2s; animation: photoGlow 3s infinite ease-in-out; }
+    #mainImg { max-width: 85%; max-height: 60%; border: 6px solid white; border-radius: 15px; transition: opacity 1s; animation: photoGlow 4s infinite ease-in-out; }
+    .btn-row { display: flex; flex-direction: row; gap: 30px; margin-top: 30px; z-index: 200; position: relative; justify-content: center; }
+    .btn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 35px; cursor: pointer; font-weight: bold; }
+    @keyframes slice { 0% { transform: rotate(-45deg) translate(0, 0); } 100% { transform: rotate(-45deg) translate(-100px, 80px); } }
     @keyframes vibrate { 0% { transform: translate(0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); } 100% { transform: translate(0); } }
     .shake-effect { animation: vibrate 0.1s linear infinite; }
-
-    /* ROTATION OVERLAY STYLE */
-    #rotateOverlay {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        background: #000;
-        z-index: 9999;
-        display: none; 
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        color: #ffd65c;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .phone-icon {
-        font-size: 50px;
-        margin-bottom: 20px;
-        animation: rotatePhone 2s infinite ease-in-out;
-    }
-
-    @keyframes rotatePhone {
-        0% { transform: rotate(0deg); }
-        50% { transform: rotate(90deg); }
-        100% { transform: rotate(0deg); }
-    }
-
-    /* Shows message ONLY on mobile when held vertically */
-    @media screen and (max-width: 900px) and (orientation: portrait) {
-        #rotateOverlay { display: flex; }
-        .scene.active { display: none !important; }
-    }
 </style>
 </head>
 <body id="mainBody">
-
-<div id="rotateOverlay">
-    <div class="phone-icon">📱🔄</div>
-    <p style="font-size: 18px; text-align: center; padding: 20px; line-height: 1.5;">
-        Please rotate your phone to <b>Landscape</b> <br> 
-        for the best experience, <span style="font-family: 'Great Vibes'; font-size: 24px;">Dhanushaaaa</span> ✨
-    </p>
-</div>
 
 <canvas id="galaxy"></canvas>
 <audio id="music" loop><source src="music.mp3"></audio>
 
 <div id="introScene" class="scene active">
     <h1 class="title">Dhanushaaaa ✨</h1>
-    <p id="promptMsg">Ready for your surprise?</p>
+    <p>Ready for your surprise?</p>
     <div id="teddyPrank">
         <div class="t-ear" style="left:5px;"></div><div class="t-ear" style="right:5px;"></div>
         <div class="t-head">
@@ -108,38 +59,37 @@
     </div>
     <div class="btn-row" id="btnGroup">
         <button id="yesBtn" class="btn" style="background:#4B79A1; color:white;" onclick="nextScene('candleScene')">YES</button>
-        <button id="noBtn" class="btn" style="background:#ff4d4d; color:white;" onmouseover="doPrank()" onclick="doPrank()">NO</button>
+        <button id="noBtn" class="btn" style="background:#ff4d4d; color:white;" onclick="doPrank()">NO</button>
     </div>
 </div>
 
 <div id="candleScene" class="scene">
-    <div id="countdown" style="font-size: 100px; color: #ffd65c; font-family: 'Great Vibes';">✨</div>
-    <div style="width: 25px; height: 90px; background: #eee; border-radius: 5px; position: relative; margin: 20px 0;">
-        <div id="flame" onclick="blowOut()" style="display:none; position: absolute; top: -45px; left: -2px; width: 30px; height: 50px; background: radial-gradient(ellipse at bottom, #fff, #ffcc00 40%, #ff6600 70%, transparent 90%); border-radius: 50%; cursor: pointer;"></div>
+    <div id="countdown" style="font-size: 80px; color: #ffd65c; font-family: 'Great Vibes';">✨</div>
+    <div style="width: 15px; height: 70px; background: #eee; border-radius: 5px; position: relative; margin: 20px 0;">
+        <div id="flame" onclick="blowOut()" style="display:none; position: absolute; top: -40px; left: -7px; width: 30px; height: 50px; background: radial-gradient(ellipse at bottom, #fff, #ffcc00 40%, #ff6600 70%, transparent 90%); border-radius: 50%; cursor: pointer;"></div>
     </div>
     <button id="startBdayBtn" class="btn" style="background:#4B79A1; color:white;" onclick="runCountdown()">START BIRTHDAY ✨</button>
-    <p id="blowPrompt" style="display:none; font-family: 'Great Vibes'; font-size: 28px; color: #ffd65c;">Tap the flame to blow it!</p>
+    <p id="blowPrompt" style="display:none; font-family: 'Great Vibes'; font-size: 24px; color: #ffd65c;">Tap the flame to blow it!</p>
 </div>
 
 <div id="cakeScene" class="scene">
-    <h2 class="title" style="font-size: 45px;">Time to cut your Cake! 🎂</h2>
-    <div style="width: 200px; height: 100px; background: pink; border-radius: 15px; border: 4px solid #fff; position: relative; margin-bottom: 20px;">
-        <div id="knife" style="width:70px; height:10px; background:silver; position:absolute; top:-40px; right:-50px; transform:rotate(-45deg); display:none; border-radius:5px;"></div>
+    <h2 class="title" style="font-size: 35px;">Time to cut your Cake! 🎂</h2>
+    <div style="width: 180px; height: 90px; background: pink; border-radius: 15px; border: 4px solid #fff; position: relative; margin-bottom: 20px;">
+        <div id="knife" style="width:60px; height:8px; background:silver; position:absolute; top:-30px; right:-40px; transform:rotate(-45deg); display:none; border-radius:5px;"></div>
     </div>
-    <p id="tapToCutText" style="font-family: 'Great Vibes'; font-size: 24px; color: #ffd65c; margin-bottom: 10px;">Tap to cut the cake!</p>
     <button id="cutBtn" class="btn" style="background:#4B79A1; color:white;" onclick="cutCake()">CUT THE CAKE</button>
-    <div id="cakeMsg" style="margin-top: 20px; font-family: 'Great Vibes'; font-size: 40px; color: #ffd65c;"></div>
+    <div id="cakeMsg" style="margin-top: 20px; font-family: 'Great Vibes'; font-size: 32px; color: #ffd65c;"></div>
 </div>
 
 <div id="photoScene" class="scene"><img id="mainImg"></div>
 
 <div id="finalScene" class="scene">
-    <img src="photo10.jpg" id="bgPhoto10" class="img-10-bg" style="animation: photoGlow 5s infinite ease-in-out;">
+    <img src="photo10.jpg" id="bgPhoto10" class="img-10-bg">
     <div class="finale-container">
-        <img src="photo9.png" id="lastPhoto9" class="img-9-behind" style="animation: photoGlow 6s infinite ease-in-out;">
+        <img src="photo9.png" id="lastPhoto9" class="img-9-behind">
         <div class="finale-text-block">
-            <h1 class="title" style="font-size: 50px; margin: 0;">Happy Birthday Baddieeee 🎉</h1>
-            <p style="font-family: 'Great Vibes'; font-size: 26px; color: #ffd65c; margin: 0;">Still the coolest girl in the universe ✨</p>
+            <h1 class="title" style="font-size: 35px; margin: 0;">Happy Birthday Baddieeee 🎉</h1>
+            <p style="font-family: 'Great Vibes'; font-size: 22px; color: #ffd65c; margin: 0;">Still the coolest girl in the universe ✨</p>
         </div>
         <div id="collageArea" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index: 10;"></div>
     </div>
@@ -165,9 +115,9 @@
             document.getElementById("btnGroup").style.visibility = "visible";
             const no = document.getElementById("noBtn");
             no.style.position = "absolute";
-            no.style.left = Math.random() * 70 + "%";
-            no.style.top = Math.random() * 70 + "%";
-        }, 2000);
+            no.style.left = Math.random() * 60 + "%";
+            no.style.top = Math.random() * 60 + "%";
+        }, 1500);
     }
 
     function runCountdown() {
@@ -192,13 +142,12 @@
         document.getElementById("knife").style.display = "block";
         document.getElementById("knife").style.animation = "slice 1s forwards";
         document.getElementById("cutBtn").style.display = "none";
-        document.getElementById("tapToCutText").style.display = "none";
         setTimeout(() => {
             document.getElementById("cakeMsg").innerText = "A small bite for you 😋";
             setTimeout(() => {
                 document.getElementById("cakeMsg").innerText = "Wait Supergirllll 😎✨";
-                setTimeout(() => { nextScene('photoScene'); startGallery(); }, 3000);
-            }, 3000);
+                setTimeout(() => { nextScene('photoScene'); startGallery(); }, 2500);
+            }, 2500);
         }, 1000);
     }
 
@@ -211,7 +160,7 @@
             if(idx >= photos.length) { clearInterval(loop); startFinal(); return; }
             img.style.opacity = 0;
             setTimeout(() => { img.src = photos[idx]; img.style.opacity = 1; }, 800);
-        }, 8000);
+        }, 7000);
     }
 
     function startFinal() {
@@ -220,9 +169,9 @@
         setTimeout(() => { 
             document.getElementById("bgPhoto10").style.opacity = "1";
             document.getElementById("lastPhoto9").style.opacity = "1";
-        }, 1500);
+        }, 1000);
 
-        const locs = [{top:'5%', left:'5%'}, {top:'5%', right:'5%'}, {top:'35%', left:'4%'}, {top:'35%', right:'4%'}, {bottom:'25%', left:'5%'}, {bottom:'25%', right:'5%'}, {top:'18%', left:'18%'}, {top:'18%', right:'18%'}];
+        const locs = [{top:'10%', left:'5%'}, {top:'10%', right:'5%'}, {top:'35%', left:'4%'}, {top:'35%', right:'4%'}, {bottom:'30%', left:'5%'}, {bottom:'30%', right:'5%'}, {top:'22%', left:'18%'}, {top:'22%', right:'18%'}];
         photos.slice(0, 8).forEach((s, i) => {
             setTimeout(() => {
                 const el = document.createElement("img");
@@ -232,7 +181,7 @@
                 if(p.left) el.style.left = p.left; if(p.right) el.style.right = p.right;
                 document.getElementById("collageArea").appendChild(el);
                 setTimeout(() => el.style.opacity = "1", 100);
-            }, i * 1800);
+            }, i * 1500);
         });
     }
 
@@ -240,7 +189,7 @@
     const x = cvs.getContext("2d");
     cvs.width = window.innerWidth; cvs.height = window.innerHeight;
     let stars = [];
-    for(let i=0; i<300; i++) stars.push({x: Math.random()*cvs.width, y: Math.random()*cvs.height, s: Math.random()*1.5});
+    for(let i=0; i<250; i++) stars.push({x: Math.random()*cvs.width, y: Math.random()*cvs.height, s: Math.random()*1.5});
 
     function render() {
         x.clearRect(0,0,cvs.width,cvs.height);
@@ -249,34 +198,24 @@
                 let t = i/stars.length*Math.PI*2;
                 let hx = 16*Math.pow(Math.sin(t),3);
                 let hy = 13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
-                s.x += (cvs.width/2 + hx*18 - s.x) * 0.003; 
-                s.y += (cvs.height/2 - hy*18 - s.y) * 0.003;
-            } else { s.y += 0.3; if(s.y > cvs.height) s.y = 0; }
+                s.x += (cvs.width/2 + hx*14 - s.x) * 0.005; 
+                s.y += (cvs.height/2 - hy*14 - s.y) * 0.005;
+            } else { s.y += 0.4; if(s.y > cvs.height) s.y = 0; }
             x.fillStyle = "#fff"; x.fillRect(s.x, s.y, s.s, s.s);
         });
         
         particles.forEach((p, i) => {
-            p.x += p.vx; p.y += p.vy; p.vy += 0.07; 
-            p.l -= 0.8; 
-            x.fillStyle = p.c; x.shadowBlur = 10; x.shadowColor = p.c;
-            x.beginPath(); x.arc(p.x, p.y, p.sz, 0, Math.PI*2); x.fill();
-            x.shadowBlur = 0;
+            p.x += p.vx; p.y += p.vy; p.vy += 0.07; p.l -= 0.8; 
+            x.fillStyle = p.c; x.beginPath(); x.arc(p.x, p.y, p.sz, 0, Math.PI*2); x.fill();
             if(p.l <= 0) particles.splice(i,1);
         });
 
         if(fireworkMode && Math.random() < 0.08) {
-            let px = Math.random()*cvs.width, py = Math.random()*cvs.height*0.5;
-            let colors = ["#ff5cc8","#ffd65c","#5ce1ff", "#ffffff", "#ff4d4d"];
+            let px = Math.random()*cvs.width, py = Math.random()*cvs.height*0.4;
+            let colors = ["#ff5cc8","#ffd65c","#5ce1ff", "#ffffff"];
             let co = colors[Math.floor(Math.random()*colors.length)];
-            for(let i=0; i<60; i++) {
-                particles.push({
-                    x:px, y:py, 
-                    vx:(Math.random()-0.5)*12, 
-                    vy:(Math.random()-0.5)*12, 
-                    l:Math.random()*50 + 40, 
-                    c:co, 
-                    sz:Math.random()*3
-                });
+            for(let i=0; i<40; i++) {
+                particles.push({x:px, y:py, vx:(Math.random()-0.5)*12, vy:(Math.random()-0.5)*12, l:Math.random()*50 + 30, c:co, sz:Math.random()*2.5});
             }
         }
         requestAnimationFrame(render);
