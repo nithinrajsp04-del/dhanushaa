@@ -46,6 +46,7 @@
     @keyframes slice { 0% { transform: rotate(-45deg) translate(0, 0); } 100% { transform: rotate(-45deg) translate(-150px, 100px); } }
     @keyframes vibrate { 0% { transform: translate(0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); } 100% { transform: translate(0); } }
     .shake-effect { animation: vibrate 0.1s linear infinite; }
+
     /* ROTATION OVERLAY STYLE */
     #rotateOverlay {
         position: fixed;
@@ -53,7 +54,7 @@
         width: 100vw; height: 100vh;
         background: #000;
         z-index: 9999;
-        display: none; /* Hidden by default */
+        display: none; 
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -73,7 +74,7 @@
         100% { transform: rotate(0deg); }
     }
 
-    /* Shows the message ONLY on mobile when held vertically */
+    /* Shows message ONLY on mobile when held vertically */
     @media screen and (max-width: 900px) and (orientation: portrait) {
         #rotateOverlay { display: flex; }
         .scene.active { display: none !important; }
@@ -81,6 +82,14 @@
 </style>
 </head>
 <body id="mainBody">
+
+<div id="rotateOverlay">
+    <div class="phone-icon">📱🔄</div>
+    <p style="font-size: 18px; text-align: center; padding: 20px; line-height: 1.5;">
+        Please rotate your phone to <b>Landscape</b> <br> 
+        for the best experience, <span style="font-family: 'Great Vibes'; font-size: 24px;">Dhanushaaaa</span> ✨
+    </p>
+</div>
 
 <canvas id="galaxy"></canvas>
 <audio id="music" loop><source src="music.mp3"></audio>
@@ -134,13 +143,6 @@
         </div>
         <div id="collageArea" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index: 10;"></div>
     </div>
-    <div id="rotateOverlay">
-    <div class="phone-icon">📱🔄</div>
-    <p style="font-size: 18px; text-align: center; padding: 20px; line-height: 1.5;">
-        Please rotate your phone to <b>Landscape</b> <br> 
-        for the best experience, <span style="font-family: 'Great Vibes'; font-size: 24px;">Dhanushaaaa</span> ✨
-    </p>
-</div>
 </div>
 
 <script>
@@ -254,20 +256,19 @@
         });
         
         particles.forEach((p, i) => {
-            p.x += p.vx; p.y += p.vy; p.vy += 0.07; // Gravity
-            p.l -= 0.8; // Faster trail life
+            p.x += p.vx; p.y += p.vy; p.vy += 0.07; 
+            p.l -= 0.8; 
             x.fillStyle = p.c; x.shadowBlur = 10; x.shadowColor = p.c;
             x.beginPath(); x.arc(p.x, p.y, p.sz, 0, Math.PI*2); x.fill();
             x.shadowBlur = 0;
             if(p.l <= 0) particles.splice(i,1);
         });
 
-        // REFINED FIREWORKS LOGIC
-        if(fireworkMode && Math.random() < 0.08) { // More frequent (0.08)
+        if(fireworkMode && Math.random() < 0.08) {
             let px = Math.random()*cvs.width, py = Math.random()*cvs.height*0.5;
             let colors = ["#ff5cc8","#ffd65c","#5ce1ff", "#ffffff", "#ff4d4d"];
             let co = colors[Math.floor(Math.random()*colors.length)];
-            for(let i=0; i<60; i++) { // More particles per explosion
+            for(let i=0; i<60; i++) {
                 particles.push({
                     x:px, y:py, 
                     vx:(Math.random()-0.5)*12, 
