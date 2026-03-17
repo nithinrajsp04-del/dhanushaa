@@ -7,181 +7,129 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-    body { margin: 0; padding: 0; overflow: hidden; background: #000; font-family: 'Poppins', sans-serif; color: #fff; text-align: center; width: 100vw; height: 100vh; }
-    canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1000; }
-
-    /* MOBILE ORIENTATION GUARD */
-    #mobileGuard {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: radial-gradient(circle, #1a1a1a, #000);
-        z-index: 10000; display: flex; 
-        flex-direction: column; justify-content: center; align-items: center; color: #ffd65c;
+    * { box-sizing: border-box; }
+    body, html { margin: 0; padding: 0; background: #000; overflow: hidden; width: 100%; height: 100%; font-family: 'Poppins', sans-serif; color: #fff; }
+    
+    /* FORCED LANDSCAPE LOGIC */
+    #mainContainer {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        width: 100vw; height: 100vh; transition: transform 0.5s ease;
     }
 
-    /* Hide guard only when screen is wider than it is tall (Landscape) */
-    @media screen and (min-aspect-ratio: 1/1) {
-        #mobileGuard { display: none; }
+    @media screen and (orientation: portrait) {
+        #mainContainer {
+            transform: rotate(90deg);
+            width: 100vh;
+            height: 100vw;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
     }
 
-    .phone-icon { font-size: 60px; margin-bottom: 20px; animation: rotatePhone 2s infinite ease-in-out; }
-    @keyframes rotatePhone { 0% { transform: rotate(0deg); } 50% { transform: rotate(90deg); } 100% { transform: rotate(0deg); } }
-
-    .scene { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; top: 0; left: 0; z-index: 10; }
+    canvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 1; }
+    .scene { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10; padding: 20px; }
     .active { display: flex !important; }
-    .title { font-size: clamp(35px, 8vw, 75px); font-family: 'Great Vibes', cursive; background: linear-gradient(45deg,#ff5cc8,#ffd65c,#5ce1ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; z-index: 100; margin: 10px; position: relative; }
 
-    /* TEDDY */
-    #teddyPrank { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(0.6); z-index: 300; display: none; }
-    .t-ear { width: 45px; height: 45px; background: #d4a373; border-radius: 50%; position: absolute; top: -5px; border: 2px solid #bc8a5f; }
-    .t-head { width: 120px; height: 105px; background: #eacda3; border-radius: 50% 50% 45% 45%; position: relative; z-index: 2; border: 2px solid #d4a373; }
-    .t-snout { width: 45px; height: 35px; background: #fff; border-radius: 50%; position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); opacity: 0.8; }
-    .t-body { width: 130px; height: 110px; background: #eacda3; border-radius: 42%; margin-top: -25px; position: relative; z-index: 1; border: 2px solid #d4a373; }
-    #gunIcon { position: absolute; right: -35px; bottom: 30px; font-size: 50px; filter: drop-shadow(0 0 10px red); }
+    .title { font-size: clamp(30px, 8vw, 60px); font-family: 'Great Vibes', cursive; background: linear-gradient(45deg,#ff5cc8,#ffd65c,#5ce1ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin: 10px; }
+    .btn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 35px; cursor: pointer; font-weight: bold; transition: 0.3s; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    
+    #mainImg { max-width: 75%; max-height: 65%; border: 6px solid white; border-radius: 12px; transition: opacity 1s; }
+    .collage-img { position: absolute; width: 75px; height: 75px; object-fit: cover; border: 2px solid white; border-radius: 8px; opacity: 0; transition: opacity 1.5s; z-index: 20; }
+    
+    #teddyPrank { position: relative; margin-bottom: 20px; transform: scale(0.7); display: none; z-index: 50; }
+    .t-head { width: 100px; height: 90px; background: #eacda3; border-radius: 50%; border: 2px solid #d4a373; position: relative; }
+    .t-body { width: 110px; height: 95px; background: #eacda3; border-radius: 40%; border: 2px solid #d4a373; margin-top: -20px; }
+    #gunIcon { position: absolute; right: -35px; bottom: 15px; font-size: 45px; }
 
-    /* FINALE */
-    .finale-container { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .img-10-bg { position: absolute; width: 150px; height: auto; z-index: 1; opacity: 0; transition: opacity 3s; top: 45%; left: 50%; transform: translate(-50%, -50%); border-radius: 15px; }
-    .img-9-behind { position: absolute; bottom: 5%; width: 250px; height: 150px; object-fit: cover; border: 3px solid #ffd65c; border-radius: 15px; z-index: 40; opacity: 0; transition: opacity 1.5s; filter: brightness(0.7); }
-    .finale-text-block { position: absolute; bottom: 8%; width: 100%; z-index: 100; pointer-events: none; }
-
-    @keyframes photoGlow { 0%, 100% { box-shadow: 0 0 10px rgba(255,255,255,0.3); } 50% { box-shadow: 0 0 25px rgba(255, 214, 92, 0.8), 0 0 40px rgba(255, 92, 200, 0.4); } }
-    .collage-img { position: absolute; width: 80px; height: 80px; object-fit: cover; border: 2px solid white; border-radius: 8px; z-index: 20; opacity: 0; transition: opacity 2s; animation: photoGlow 3s infinite; }
-    #mainImg { max-width: 70%; max-height: 60%; border: 6px solid white; border-radius: 12px; transition: opacity 1s; animation: photoGlow 4s infinite; }
-
-    .btn-row { display: flex; flex-direction: row; gap: 30px; margin-top: 20px; z-index: 200; position: relative; justify-content: center; }
-    .btn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 35px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-    @keyframes slice { 0% { transform: rotate(-45deg) translate(0, 0); } 100% { transform: rotate(-45deg) translate(-150px, 100px); } }
     .shake-effect { animation: vibrate 0.1s linear infinite; }
-    @keyframes vibrate { 0% { transform: translate(0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); } 100% { transform: translate(0); } }
+    @keyframes vibrate { 0% { transform: translate(0); } 25% { transform: translate(-4px, 4px); } 50% { transform: translate(4px, -4px); } 100% { transform: translate(0); } }
 </style>
 </head>
-<body id="mainBody">
+<body>
 
-<div id="mobileGuard">
-    <div class="phone-icon">📱🔄</div>
-    <p style="font-size: 18px; text-align: center; padding: 20px; line-height: 1.6;">
-        Hey <span style="font-family: 'Great Vibes'; font-size: 26px;">Dhanushaaaa</span>,<br>
-        Please <b>rotate your phone sideways</b><br>
-        to start the surprise! ✨
-    </p>
-</div>
+<div id="mainContainer">
+    <canvas id="galaxy"></canvas>
+    <audio id="music" loop><source src="music.mp3"></audio>
 
-<canvas id="galaxy"></canvas>
-<audio id="music" loop><source src="music.mp3"></audio>
-
-<div id="introScene" class="scene active">
-    <h1 class="title">Dhanushaaaa ✨</h1>
-    <p id="promptMsg">Ready for your surprise?</p>
-    <div id="teddyPrank">
-        <div class="t-ear" style="left:5px;"></div><div class="t-ear" style="right:5px;"></div>
-        <div class="t-head">
-            <div style="left:28px; width:10px; height:10px; background:#332211; border-radius:50%; position:absolute; top:40px;"></div>
-            <div style="right:28px; width:10px; height:10px; background:#332211; border-radius:50%; position:absolute; top:40px;"></div>
-            <div class="t-snout"></div>
+    <div id="introScene" class="scene active">
+        <h1 class="title">Dhanushaaaa ✨</h1>
+        <div id="teddyPrank">
+            <div class="t-head"></div>
+            <div class="t-body"><div id="gunIcon">🔫</div></div>
         </div>
-        <div class="t-body"><div id="gunIcon">🔫</div></div>
-    </div>
-    <div class="btn-row" id="btnGroup">
-        <button id="yesBtn" class="btn" style="background:#4B79A1; color:white;" onclick="startSurprise()">YES</button>
-        <button id="noBtn" class="btn" style="background:#ff4d4d; color:white;" onmouseover="doPrank()" onclick="doPrank()">NO</button>
-    </div>
-</div>
-
-<div id="candleScene" class="scene">
-    <div id="countdown" style="font-size: 80px; color: #ffd65c; font-family: 'Great Vibes';">✨</div>
-    <div style="width: 20px; height: 70px; background: #eee; border-radius: 5px; position: relative; margin: 15px 0;">
-        <div id="flame" onclick="blowOut()" style="display:none; position: absolute; top: -40px; left: -5px; width: 30px; height: 45px; background: radial-gradient(ellipse at bottom, #fff, #ffcc00 40%, #ff6600 70%, transparent 90%); border-radius: 50%; cursor: pointer;"></div>
-    </div>
-    <button id="startBdayBtn" class="btn" style="background:#4B79A1; color:white;" onclick="runCountdown()">START BIRTHDAY ✨</button>
-    <p id="blowPrompt" style="display:none; font-family: 'Great Vibes'; font-size: 24px; color: #ffd65c;">Tap the flame to blow it!</p>
-</div>
-
-<div id="cakeScene" class="scene">
-    <h2 class="title" style="font-size: 35px;">Time to cut your Cake! 🎂</h2>
-    <div style="width: 160px; height: 80px; background: pink; border-radius: 12px; border: 3px solid #fff; position: relative; margin-bottom: 15px;">
-        <div id="knife" style="width:60px; height:8px; background:silver; position:absolute; top:-30px; right:-40px; transform:rotate(-45deg); display:none; border-radius:5px;"></div>
-    </div>
-    <p id="tapToCutText" style="font-family: 'Great Vibes'; font-size: 22px; color: #ffd65c;">Tap to cut the cake!</p>
-    <button id="cutBtn" class="btn" style="background:#4B79A1; color:white;" onclick="cutCake()">CUT THE CAKE</button>
-    <div id="cakeMsg" style="margin-top: 15px; font-family: 'Great Vibes'; font-size: 32px; color: #ffd65c;"></div>
-</div>
-
-<div id="photoScene" class="scene"><img id="mainImg"></div>
-
-<div id="finalScene" class="scene">
-    <img src="photo10.jpg" id="bgPhoto10" class="img-10-bg" style="animation: photoGlow 5s infinite ease-in-out;">
-    <div class="finale-container">
-        <img src="photo9.png" id="lastPhoto9" class="img-9-behind" style="animation: photoGlow 6s infinite ease-in-out;">
-        <div class="finale-text-block">
-            <h1 class="title" style="font-size: 40px; margin: 0;">Happy Birthday Baddieeee 🎉</h1>
-            <p style="font-family: 'Great Vibes'; font-size: 22px; color: #ffd65c; margin: 0;">Still the coolest girl in the universe ✨</p>
+        <div id="btnGroup" style="display:flex; gap: 30px;">
+            <button class="btn" style="background:#4B79A1; color:white;" onclick="nextScene('candleScene')">YES</button>
+            <button id="noBtn" class="btn" style="background:#ff4d4d; color:white;" onmouseover="doPrank()" onclick="doPrank()">NO</button>
         </div>
-        <div id="collageArea" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index: 10;"></div>
+    </div>
+
+    <div id="candleScene" class="scene">
+        <div id="countdown" style="font-size: 60px; color: #ffd65c; font-family: 'Great Vibes';">Make a wish...</div>
+        <div style="width: 20px; height: 70px; background: #eee; border-radius: 5px; position: relative; margin: 20px 0;">
+            <div id="flame" onclick="blowOut()" style="display:none; position: absolute; top: -40px; left: -5px; width: 30px; height: 50px; background: radial-gradient(ellipse at bottom, #fff, #ffcc00 40%, #ff6600 70%, transparent 90%); border-radius: 50%; cursor: pointer;"></div>
+        </div>
+        <button id="startBdayBtn" class="btn" style="background:#4B79A1; color:white;" onclick="runCountdown()">LIGHT IT! 🕯️</button>
+    </div>
+
+    <div id="cakeScene" class="scene">
+        <h2 class="title" style="font-size: 35px;">Birthday Girl 🎂</h2>
+        <div style="width: 150px; height: 80px; background: pink; border-radius: 12px; border: 4px solid #fff; position: relative;"></div>
+        <button id="cutBtn" class="btn" style="background:#4B79A1; color:white; margin-top:25px;" onclick="cutCake()">CUT THE CAKE</button>
+        <div id="cakeMsg" style="margin-top: 20px; font-family: 'Great Vibes'; font-size: 32px; color: #ffd65c;"></div>
+    </div>
+
+    <div id="photoScene" class="scene"><img id="mainImg"></div>
+
+    <div id="finalScene" class="scene">
+        <h1 class="title" style="font-size: 40px; margin-bottom: 10px;">Happy Birthday Dhanushaaaa 🎉</h1>
+        <p style="font-family: 'Great Vibes'; font-size: 24px; color: #ffd65c; margin: 0;">Stay awesome, always! ✨</p>
+        <div id="collageArea" style="width:100%; height:100%; position:absolute; top:0; left:0; pointer-events:none;"></div>
     </div>
 </div>
 
 <script>
-    let heartMode = false, fireworkMode = false, particles = [], autoCutTimer;
-    const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg", "photo6.jpg", "photo7.jpg", "photo8.png", "photo9.png"];
-
-    // Forces Fullscreen on Mobile to help orientation
-    function startSurprise() {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(() => {});
-        }
-        nextScene('candleScene');
-    }
+    let heartMode = false, fireworkMode = false, particles = [];
+    const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg", "photo6.jpg", "photo7.jpg", "photo8.png", "photo9.png", "photo10.jpg"];
 
     function nextScene(id) {
         document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'cakeScene') autoCutTimer = setTimeout(cutCake, 7000);
     }
 
     function doPrank() {
-        document.getElementById("mainBody").classList.add("shake-effect");
-        document.getElementById("btnGroup").style.visibility = "hidden";
+        document.getElementById("mainContainer").classList.add("shake-effect");
         document.getElementById("teddyPrank").style.display = "block";
         setTimeout(() => {
-            document.getElementById("mainBody").classList.remove("shake-effect");
+            document.getElementById("mainContainer").classList.remove("shake-effect");
             document.getElementById("teddyPrank").style.display = "none";
-            document.getElementById("btnGroup").style.visibility = "visible";
             const no = document.getElementById("noBtn");
             no.style.position = "absolute";
-            no.style.left = Math.random() * 60 + "%"; no.style.top = Math.random() * 60 + "%";
-        }, 2000);
+            no.style.left = Math.random() * 50 + 10 + "%"; no.style.top = Math.random() * 50 + 10 + "%";
+        }, 1200);
     }
 
     function runCountdown() {
         document.getElementById("startBdayBtn").style.display = "none";
-        let c = 5;
-        const cd = document.getElementById("countdown");
+        let c = 3;
         const t = setInterval(() => {
-            c--; cd.innerText = c;
-            if(c<=0){ clearInterval(t); cd.innerText="❤️"; document.getElementById("flame").style.display="block"; document.getElementById("blowPrompt").style.display="block"; }
+            document.getElementById("countdown").innerText = c;
+            if(c<=0){ clearInterval(t); document.getElementById("countdown").innerText="🔥"; document.getElementById("flame").style.display="block"; }
+            c--;
         }, 1000);
     }
 
     function blowOut() {
         document.getElementById("flame").style.display = "none";
-        document.getElementById("blowPrompt").style.display = "none";
         document.getElementById("music").play();
-        setTimeout(() => nextScene('cakeScene'), 1000);
+        setTimeout(() => nextScene('cakeScene'), 800);
     }
 
     function cutCake() {
-        clearTimeout(autoCutTimer);
-        document.getElementById("knife").style.display = "block";
-        document.getElementById("knife").style.animation = "slice 1s forwards";
         document.getElementById("cutBtn").style.display = "none";
-        document.getElementById("tapToCutText").style.display = "none";
-        setTimeout(() => {
-            document.getElementById("cakeMsg").innerText = "A small bite for you 😋";
-            setTimeout(() => {
-                document.getElementById("cakeMsg").innerText = "Wait Supergirllll 😎✨";
-                setTimeout(() => { nextScene('photoScene'); startGallery(); }, 3000);
-            }, 3000);
-        }, 1000);
+        document.getElementById("cakeMsg").innerText = "Special things coming... 💖";
+        setTimeout(() => { nextScene('photoScene'); startGallery(); }, 2500);
     }
 
     function startGallery() {
@@ -190,37 +138,38 @@
         img.src = photos[idx];
         const loop = setInterval(() => {
             idx++;
-            if(idx >= photos.length) { clearInterval(loop); startFinal(); return; }
+            if(idx >= photos.length - 1) { clearInterval(loop); startFinal(); return; }
             img.style.opacity = 0;
-            setTimeout(() => { img.src = photos[idx]; img.style.opacity = 1; }, 800);
-        }, 8000);
+            setTimeout(() => { img.src = photos[idx]; img.style.opacity = 1; }, 500);
+        }, 4000);
     }
 
     function startFinal() {
         nextScene('finalScene');
         heartMode = true; fireworkMode = true;
-        setTimeout(() => { 
-            document.getElementById("bgPhoto10").style.opacity = "1";
-            document.getElementById("lastPhoto9").style.opacity = "1";
-        }, 1500);
-        const locs = [{top:'2%', left:'2%'}, {top:'2%', right:'2%'}, {top:'30%', left:'3%'}, {top:'30%', right:'3%'}, {bottom:'20%', left:'3%'}, {bottom:'20%', right:'3%'}, {top:'15%', left:'15%'}, {top:'15%', right:'15%'}];
-        photos.slice(0, 8).forEach((s, i) => {
+        const locs = [{top:'5%',left:'5%'},{top:'5%',right:'5%'},{bottom:'5%',left:'5%'},{bottom:'5%',right:'5%'},{top:'45%',left:'2%'},{top:'45%',right:'2%'}];
+        photos.slice(0, 6).forEach((s, i) => {
             setTimeout(() => {
                 const el = document.createElement("img"); el.src = s; el.className = "collage-img";
-                const p = locs[i];
-                if(p.top) el.style.top = p.top; if(p.bottom) el.style.bottom = p.bottom;
-                if(p.left) el.style.left = p.left; if(p.right) el.style.right = p.right;
+                if(locs[i].top) el.style.top = locs[i].top; if(locs[i].bottom) el.style.bottom = locs[i].bottom;
+                if(locs[i].left) el.style.left = locs[i].left; if(locs[i].right) el.style.right = locs[i].right;
                 document.getElementById("collageArea").appendChild(el);
                 setTimeout(() => el.style.opacity = "1", 100);
-            }, i * 1800);
+            }, i * 1500);
         });
     }
 
     const cvs = document.getElementById("galaxy");
     const x = cvs.getContext("2d");
-    cvs.width = window.innerWidth; cvs.height = window.innerHeight;
+    function resize() { 
+        cvs.width = window.innerWidth > window.innerHeight ? window.innerWidth : window.innerHeight; 
+        cvs.height = window.innerWidth > window.innerHeight ? window.innerHeight : window.innerWidth;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
     let stars = [];
-    for(let i=0; i<250; i++) stars.push({x: Math.random()*cvs.width, y: Math.random()*cvs.height, s: Math.random()*1.2});
+    for(let i=0; i<200; i++) stars.push({x: Math.random()*2000, y: Math.random()*2000, s: Math.random()*1.5});
 
     function render() {
         x.clearRect(0,0,cvs.width,cvs.height);
@@ -229,25 +178,22 @@
                 let t = i/stars.length*Math.PI*2;
                 let hx = 16*Math.pow(Math.sin(t),3);
                 let hy = 13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
-                s.x += (cvs.width/2 + hx*15 - s.x) * 0.003; s.y += (cvs.height/2 - hy*15 - s.y) * 0.003;
-            } else { s.y += 0.3; if(s.y > cvs.height) s.y = 0; }
+                s.x += (cvs.width/2 + hx*12 - s.x) * 0.01; s.y += (cvs.height/2 - hy*12 - s.y) * 0.01;
+            } else { s.y += 0.5; if(s.y > cvs.height) s.y = 0; }
             x.fillStyle = "#fff"; x.fillRect(s.x, s.y, s.s, s.s);
         });
         particles.forEach((p, i) => {
-            p.x += p.vx; p.y += p.vy; p.vy += 0.07; p.l -= 0.8;
-            x.fillStyle = p.c; x.shadowBlur = 10; x.shadowColor = p.c;
-            x.beginPath(); x.arc(p.x, p.y, p.sz, 0, Math.PI*2); x.fill();
-            x.shadowBlur = 0;
+            p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.l -= 0.8;
+            x.fillStyle = p.c; x.beginPath(); x.arc(p.x, p.y, p.sz, 0, Math.PI*2); x.fill();
             if(p.l <= 0) particles.splice(i,1);
         });
-        if(fireworkMode && Math.random() < 0.08) {
-            let px = Math.random()*cvs.width, py = Math.random()*cvs.height*0.5, co = ["#ff5cc8","#ffd65c","#5ce1ff","#ffffff","#ff4d4d"][Math.floor(Math.random()*5)];
-            for(let i=0; i<50; i++) particles.push({x:px, y:py, vx:(Math.random()-0.5)*10, vy:(Math.random()-0.5)*10, l:Math.random()*40+30, c:co, sz:Math.random()*2.5});
+        if(fireworkMode && Math.random() < 0.05) {
+            let px = Math.random()*cvs.width, py = Math.random()*cvs.height*0.5;
+            for(let i=0; i<40; i++) particles.push({x:px, y:py, vx:(Math.random()-0.5)*8, vy:(Math.random()-0.5)*8, l:50, c:"#ffd65c", sz:2});
         }
         requestAnimationFrame(render);
     }
     render();
-    window.onresize = () => { cvs.width = window.innerWidth; cvs.height = window.innerHeight; };
 </script>
 </body>
 </html>
