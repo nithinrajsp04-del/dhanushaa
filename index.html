@@ -147,7 +147,6 @@ canvas { position: fixed; top: 0; left: 0; pointer-events: none; }
 </div>
 
 <script>
-// --- LOGIC ---
 const noBtn = document.getElementById("noBtn");
 const shotSound = document.getElementById("shotSound");
 const teddy = document.getElementById("teddyPrank");
@@ -178,7 +177,6 @@ function triggerCountdown() {
     let count = 5;
     const cd = document.getElementById("countdown");
     cd.innerText = count;
-
     const timer = setInterval(() => {
         count--;
         cd.innerText = count;
@@ -194,8 +192,6 @@ function triggerCountdown() {
 function blowOut() {
     document.getElementById("flame").style.display = "none";
     document.getElementById("blowText").innerText = "Make a wish!";
-    
-    // Play Music
     const music = document.getElementById("music");
     music.volume = 0; music.play();
     let vol = 0;
@@ -203,7 +199,6 @@ function blowOut() {
         if (vol < 0.9) { vol += 0.1; music.volume = vol; }
         else clearInterval(fadeIn);
     }, 100);
-
     setTimeout(() => { showScene("cakeScene"); }, 2000);
 }
 
@@ -238,7 +233,7 @@ function startSlideshow() {
         if(pIdx >= photoFiles.length) { clearInterval(slide); startFinal(); return; }
         img.style.opacity = 0;
         setTimeout(() => { img.src = photoFiles[pIdx]; img.style.opacity = 1; }, 800);
-    }, 6000);
+    }, 7000); // UPDATED TO 7 SECONDS
 }
 
 function startFinal() {
@@ -257,7 +252,6 @@ function startFinal() {
     });
 }
 
-// Galaxy background logic
 const canvas = document.getElementById("galaxy");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth; canvas.height = window.innerHeight;
