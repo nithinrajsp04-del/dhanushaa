@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,215 +7,242 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-body { margin: 0; overflow: hidden; background: black; font-family: 'Poppins', sans-serif; color: white; text-align: center; }
-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1; }
-.scene { position: absolute; width: 100%; height: 100%; display: none; justify-content: center; align-items: center; flex-direction: column; z-index: 10; }
-.active { display: flex; }
-.title { font-size: 75px; font-family: 'Great Vibes', cursive; background: linear-gradient(45deg,#ff5cc8,#ffd65c,#5ce1ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    body { margin: 0; padding: 0; overflow: hidden; background: #000; font-family: 'Poppins', sans-serif; color: #fff; text-align: center; width: 100vw; height: 100vh; }
+    
+    /* Particles in the very front */
+    canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1000; }
 
-/* --- TEDDY --- */
-.teddy-wrapper { position: relative; width: 220px; height: 280px; margin-bottom: 20px; }
-.t-ear { width: 50px; height: 50px; background: #d2b48c; border-radius: 50%; position: absolute; top: 0; }
-.t-ear.left { left: 30px; } .t-ear.right { right: 30px; }
-.t-head { width: 120px; height: 100px; background: #d2b48c; border-radius: 50%; position: absolute; top: 20px; left: 50px; }
-.t-eye { width: 14px; height: 14px; background: #222; border-radius: 50%; position: absolute; top: 40px; }
-.t-eye.left { left: 30px; } .t-eye.right { right: 30px; }
-.t-body { width: 130px; height: 130px; background: #d2b48c; border-radius: 45%; position: absolute; top: 100px; left: 45px; }
+    .scene { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; top: 0; left: 0; z-index: 10; }
+    .active { display: flex !important; }
 
-/* --- CANDLE --- */
-.candle-body { width: 25px; height: 90px; background: linear-gradient(to right, #e0e0e0, #ffffff, #e0e0e0); border-radius: 4px; position: relative; }
-.flame-container { position: absolute; top: -45px; left: 50%; transform: translateX(-50%); width: 30px; height: 50px; cursor: pointer; animation: flicker 0.1s infinite alternate; }
-.flame-main { width: 100%; height: 100%; background: radial-gradient(ellipse at bottom, #fff, #ffcc00 40%, #ff6600 70%, transparent 90%); border-radius: 50% 50% 20% 20%; filter: blur(1px); }
+    .title { font-size: clamp(40px, 10vw, 75px); font-family: 'Great Vibes', cursive; background: linear-gradient(45deg,#ff5cc8,#ffd65c,#5ce1ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; z-index: 100; margin: 10px; position: relative; }
 
-/* --- BUTTONS --- */
-.btn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; margin-top: 20px; z-index: 20; font-family: 'Poppins'; }
-#yesBtn { background: #4B79A1; color: white; }
-#noBtn { background: #333; color: #777; position: absolute; }
-#startBdayBtn { background: #C84B81; color: white; }
-#cutBtn { background: #ffd65c; box-shadow: 0 0 15px #ffd65c; color: black; }
+    /* --- BEAUTIFUL TEDDY --- */
+    #teddyPrank { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(0.8); z-index: 300; display: none; }
+    .t-ear { width: 45px; height: 45px; background: #d4a373; border-radius: 50%; position: absolute; top: -5px; border: 2px solid #bc8a5f; }
+    .t-head { width: 120px; height: 105px; background: #eacda3; border-radius: 50% 50% 45% 45%; position: relative; z-index: 2; border: 2px solid #d4a373; }
+    .t-snout { width: 45px; height: 35px; background: #fff; border-radius: 50%; position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); opacity: 0.8; }
+    .t-body { width: 130px; height: 110px; background: #eacda3; border-radius: 42%; margin-top: -25px; position: relative; z-index: 1; border: 2px solid #d4a373; }
+    #gunIcon { position: absolute; right: -35px; bottom: 30px; font-size: 50px; filter: drop-shadow(0 0 10px red); }
 
-/* --- IMAGES --- */
-#mainImg { max-width: 85%; max-height: 80%; border: 8px solid white; border-radius: 15px; transition: opacity 0.8s; }
-.collage-img { position: absolute; width: 160px; height: 160px; object-fit: cover; border: 4px solid white; border-radius: 10px; z-index: 5; opacity: 0; animation: appear 1.5s forwards; }
+    /* --- FINALE & GLOW --- */
+    .finale-container { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .img-10-bg { position: absolute; width: 200px; height: auto; z-index: 1; opacity: 0; transition: opacity 3s; top: 45%; left: 50%; transform: translate(-50%, -50%); border-radius: 15px; }
+    .img-9-behind { position: absolute; bottom: 5%; width: 320px; height: 200px; object-fit: cover; border: 3px solid #ffd65c; border-radius: 15px; z-index: 40; opacity: 0; transition: opacity 1.5s; filter: brightness(0.7); }
+    .finale-text-block { position: absolute; bottom: 8%; width: 100%; z-index: 100; pointer-events: none; }
 
-@keyframes appear { to { opacity: 1; } }
-@keyframes flicker { from { transform: scale(1); } to { transform: scale(1.1); } }
+    @keyframes photoGlow {
+        0% { box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        50% { box-shadow: 0 0 25px rgba(255, 214, 92, 0.8), 0 0 40px rgba(255, 92, 200, 0.4); }
+        100% { box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+    }
+
+    .collage-img { position: absolute; width: 100px; height: 100px; object-fit: cover; border: 3px solid white; border-radius: 10px; z-index: 20; opacity: 0; transition: opacity 2s; animation: photoGlow 3s infinite ease-in-out; }
+    #mainImg { max-width: 80%; max-height: 70%; border: 8px solid white; border-radius: 15px; transition: opacity 1s; animation: photoGlow 4s infinite ease-in-out; }
+
+    .btn-row { display: flex; flex-direction: row; gap: 50px; margin-top: 30px; z-index: 200; position: relative; justify-content: center; }
+    .btn { padding: 15px 45px; font-size: 20px; border: none; border-radius: 35px; cursor: pointer; font-weight: bold; }
+
+    @keyframes slice { 0% { transform: rotate(-45deg) translate(0, 0); } 100% { transform: rotate(-45deg) translate(-150px, 100px); } }
+    @keyframes vibrate { 0% { transform: translate(0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); } 100% { transform: translate(0); } }
+    .shake-effect { animation: vibrate 0.1s linear infinite; }
 </style>
 </head>
-<body>
+<body id="mainBody">
 
-<canvas id="canvas"></canvas>
+<canvas id="galaxy"></canvas>
 <audio id="music" loop><source src="music.mp3"></audio>
 
 <div id="introScene" class="scene active">
     <h1 class="title">Dhanushaaaa ✨</h1>
-    <p>Ready for your surprise?</p>
-    <div id="teddyPrank" class="teddy-wrapper" style="display:none; transform: scale(0.85);">
-        <div class="t-ear left"></div><div class="t-ear right"></div>
-        <div class="t-head"><div class="t-eye left"></div><div class="t-eye right"></div></div>
-        <div class="t-body"></div>
+    <p id="promptMsg">Ready for your surprise?</p>
+    <div id="teddyPrank">
+        <div class="t-ear" style="left:5px;"></div><div class="t-ear" style="right:5px;"></div>
+        <div class="t-head">
+            <div style="left:28px; width:10px; height:10px; background:#332211; border-radius:50%; position:absolute; top:40px;"></div>
+            <div style="right:28px; width:10px; height:10px; background:#332211; border-radius:50%; position:absolute; top:40px;"></div>
+            <div class="t-snout"></div>
+        </div>
+        <div class="t-body"><div id="gunIcon">🔫</div></div>
     </div>
-    <div id="btnContainer" style="position:relative; width:300px; height:100px;">
-        <button id="yesBtn" class="btn" onclick="sayYes()">YES</button>
-        <button id="noBtn" class="btn">NO</button>
+    <div class="btn-row" id="btnGroup">
+        <button id="yesBtn" class="btn" style="background:#4B79A1; color:white;" onclick="nextScene('candleScene')">YES</button>
+        <button id="noBtn" class="btn" style="background:#ff4d4d; color:white;" onmouseover="doPrank()" onclick="doPrank()">NO</button>
     </div>
 </div>
 
 <div id="candleScene" class="scene">
-    <div id="countdown" style="font-size: 80px; font-family: 'Great Vibes'; color: #ffd65c; margin-bottom:10px;">✨</div>
-    <div class="candle-body">
-        <div id="flame" class="flame-container" onclick="blowOut()" style="display:none;">
-            <div class="flame-main"></div>
-        </div>
+    <div id="countdown" style="font-size: 100px; color: #ffd65c; font-family: 'Great Vibes';">✨</div>
+    <div style="width: 25px; height: 90px; background: #eee; border-radius: 5px; position: relative; margin: 20px 0;">
+        <div id="flame" onclick="blowOut()" style="display:none; position: absolute; top: -45px; left: -2px; width: 30px; height: 50px; background: radial-gradient(ellipse at bottom, #fff, #ffcc00 40%, #ff6600 70%, transparent 90%); border-radius: 50%; cursor: pointer;"></div>
     </div>
-    <button id="startBdayBtn" class="btn" onclick="triggerCountdown()">START BIRTHDAY ✨</button>
-    <p id="blowText" style="font-size: 28px; color: #ffd65c; font-family: 'Great Vibes'; margin-top: 20px; display:none;">Tap the flame to blow it out!</p>
+    <button id="startBdayBtn" class="btn" style="background:#4B79A1; color:white;" onclick="runCountdown()">START BIRTHDAY ✨</button>
+    <p id="blowPrompt" style="display:none; font-family: 'Great Vibes'; font-size: 28px; color: #ffd65c;">Tap the flame to blow it!</p>
 </div>
 
 <div id="cakeScene" class="scene">
-    <h2 class="title" style="font-size: 40px;">Time to cut your Cake! 🎂</h2>
-    <div style="width: 200px; height: 100px; background: pink; border-radius: 15px; border: 4px solid #fff; margin-bottom: 20px;"></div>
-    <button id="cutBtn" class="btn" onclick="doCut()">CUT THE CAKE</button>
-    <div id="cakeMsg" style="margin-top: 25px; font-family: 'Great Vibes'; font-size: 45px;"></div>
+    <h2 class="title" style="font-size: 45px;">Time to cut your Cake! 🎂</h2>
+    <div style="width: 200px; height: 100px; background: pink; border-radius: 15px; border: 4px solid #fff; position: relative; margin-bottom: 20px;">
+        <div id="knife" style="width:70px; height:10px; background:silver; position:absolute; top:-40px; right:-50px; transform:rotate(-45deg); display:none; border-radius:5px;"></div>
+    </div>
+    <p id="tapToCutText" style="font-family: 'Great Vibes'; font-size: 24px; color: #ffd65c; margin-bottom: 10px;">Tap to cut the cake!</p>
+    <button id="cutBtn" class="btn" style="background:#4B79A1; color:white;" onclick="cutCake()">CUT THE CAKE</button>
+    <div id="cakeMsg" style="margin-top: 20px; font-family: 'Great Vibes'; font-size: 40px; color: #ffd65c;"></div>
 </div>
 
-<div id="photoScene" class="scene">
-    <img id="mainImg" src="">
-</div>
+<div id="photoScene" class="scene"><img id="mainImg"></div>
 
 <div id="finalScene" class="scene">
-    <h1 class="title" style="font-size: 70px;">Happy Birthday Baddieeee 🎉</h1>
-    <div id="collageArea" style="width:100%; height:100%; position:absolute; top:0; left:0;"></div>
+    <img src="photo10.jpg" id="bgPhoto10" class="img-10-bg" style="animation: photoGlow 5s infinite ease-in-out;">
+    <div class="finale-container">
+        <img src="photo9.png" id="lastPhoto9" class="img-9-behind" style="animation: photoGlow 6s infinite ease-in-out;">
+        <div class="finale-text-block">
+            <h1 class="title" style="font-size: 50px; margin: 0;">Happy Birthday Baddieeee 🎉</h1>
+            <p style="font-family: 'Great Vibes'; font-size: 26px; color: #ffd65c; margin: 0;">Still the coolest girl in the universe ✨</p>
+        </div>
+        <div id="collageArea" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index: 10;"></div>
+    </div>
 </div>
 
 <script>
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let heartMode = false, fireworkMode = false, particles = [], autoCutTimer;
+    const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg", "photo6.jpg", "photo7.jpg", "photo8.png", "photo9.png"];
 
-let stars = []; let fireworks = []; let heartMode = false; let fireworkMode = false;
-let autoCutTimer;
-
-for(let i=0; i<800; i++) { stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5}); }
-
-class Particle {
-    constructor(x, y, color) {
-        this.x = x; this.y = y; this.color = color;
-        this.sx = (Math.random() - 0.5) * 12; this.sy = (Math.random() - 0.5) * 12;
-        this.life = 1.0;
+    function nextScene(id) {
+        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'cakeScene') autoCutTimer = setTimeout(cutCake, 7000);
     }
-    update() { this.x += this.sx; this.y += this.sy; this.life -= 0.02; }
-    draw() { ctx.globalAlpha = this.life; ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI*2); ctx.fill(); }
-}
 
-function createFirework() {
-    const x = Math.random() * canvas.width; const y = Math.random() * (canvas.height/2);
-    const color = `hsl(${Math.random()*360}, 100%, 60%)`;
-    for(let i=0; i<45; i++) fireworks.push(new Particle(x, y, color));
-}
-
-function draw() {
-    ctx.fillStyle = "rgba(0,0,0,0.2)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-    stars.forEach((s, i) => {
-        if(heartMode) {
-            let t = i/stars.length*Math.PI*2;
-            let hx = 16*Math.pow(Math.sin(t),3);
-            let hy = 13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
-            s.x += (canvas.width/2 + hx*18 - s.x) * 0.02;
-            s.y += (canvas.height/2 - hy*18 - s.y) * 0.02;
-        } else { s.y += 0.2; if(s.y > canvas.height) s.y = 0; }
-        ctx.fillStyle = "white"; ctx.fillRect(s.x, s.y, s.size, s.size);
-    });
-    fireworks.forEach((p, i) => { p.update(); p.draw(); if(p.life <= 0) fireworks.splice(i, 1); });
-    if(fireworkMode && Math.random() < 0.07) createFirework();
-    requestAnimationFrame(draw);
-}
-
-function sayYes() {
-    document.getElementById("btnContainer").style.display = "none";
-    document.getElementById("teddyPrank").style.display = "block";
-    setTimeout(() => { showScene("candleScene"); }, 2000);
-}
-
-function triggerCountdown() {
-    document.getElementById("startBdayBtn").style.display = "none";
-    let count = 5;
-    const cd = document.getElementById("countdown");
-    cd.innerText = count;
-    const timer = setInterval(() => {
-        count--; cd.innerText = count;
-        if(count <= 0) {
-            clearInterval(timer); cd.innerText = "❤️";
-            document.getElementById("flame").style.display = "block";
-            document.getElementById("blowText").style.display = "block";
-        }
-    }, 1000);
-}
-
-function blowOut() {
-    document.getElementById("flame").style.display = "none";
-    document.getElementById("blowText").style.display = "none";
-    document.getElementById("music").play();
-    setTimeout(() => { 
-        showScene("cakeScene"); 
-        // START 8 SECOND AUTO-PROCEED TIMER
-        autoCutTimer = setTimeout(() => { doCut(); }, 8000);
-    }, 1500);
-}
-
-let cutAlreadyCalled = false;
-function doCut() {
-    if(cutAlreadyCalled) return;
-    cutAlreadyCalled = true;
-    clearTimeout(autoCutTimer); // Stop the auto-timer if she clicked it
-
-    const msg = document.getElementById("cakeMsg");
-    msg.innerText = "A small bite for you 😋";
-    setTimeout(() => {
-        msg.innerText = "Waittt Supergirllll 😎✨";
-        setTimeout(() => { showScene("photoScene"); startSlideshow(); }, 2000);
-    }, 2000);
-}
-
-let photoFiles = ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg", "photo6.jpg", "photo7.jpg", "photo8.png", "photo9.png"];
-let pIdx = 0;
-
-function startSlideshow() {
-    const img = document.getElementById("mainImg");
-    img.src = photoFiles[pIdx];
-    const slide = setInterval(() => {
-        pIdx++;
-        if(pIdx >= photoFiles.length) { clearInterval(slide); startFinal(); return; }
-        img.style.opacity = 0;
-        setTimeout(() => { img.src = photoFiles[pIdx]; img.style.opacity = 1; }, 800);
-    }, 8000);
-}
-
-function startFinal() {
-    showScene("finalScene");
-    heartMode = true; fireworkMode = true;
-    photoFiles.forEach((src, i) => {
+    function doPrank() {
+        document.getElementById("mainBody").classList.add("shake-effect");
+        document.getElementById("btnGroup").style.visibility = "hidden";
+        document.getElementById("teddyPrank").style.display = "block";
         setTimeout(() => {
-            const fImg = document.createElement("img");
-            fImg.src = src; fImg.className = "collage-img";
-            fImg.style.left = Math.random() * 80 + "%"; fImg.style.top = Math.random() * 80 + "%";
-            document.getElementById("collageArea").appendChild(fImg);
-        }, i * 1000);
-    });
-}
+            document.getElementById("mainBody").classList.remove("shake-effect");
+            document.getElementById("teddyPrank").style.display = "none";
+            document.getElementById("btnGroup").style.visibility = "visible";
+            const no = document.getElementById("noBtn");
+            no.style.position = "absolute";
+            no.style.left = Math.random() * 70 + "%";
+            no.style.top = Math.random() * 70 + "%";
+        }, 2000);
+    }
 
-const noBtn = document.getElementById("noBtn");
-noBtn.addEventListener('mouseover', () => {
-    noBtn.style.left = Math.random() * 200 + "px";
-    noBtn.style.top = (Math.random() * 100 - 50) + "px";
-});
+    function runCountdown() {
+        document.getElementById("startBdayBtn").style.display = "none";
+        let c = 5;
+        const cd = document.getElementById("countdown");
+        const t = setInterval(() => {
+            c--; cd.innerText = c;
+            if(c<=0){ clearInterval(t); cd.innerText="❤️"; document.getElementById("flame").style.display="block"; document.getElementById("blowPrompt").style.display="block"; }
+        }, 1000);
+    }
 
-function showScene(id) {
-    document.querySelectorAll(".scene").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-}
+    function blowOut() {
+        document.getElementById("flame").style.display = "none";
+        document.getElementById("blowPrompt").style.display = "none";
+        document.getElementById("music").play();
+        setTimeout(() => nextScene('cakeScene'), 1000);
+    }
 
-draw();
+    function cutCake() {
+        clearTimeout(autoCutTimer);
+        document.getElementById("knife").style.display = "block";
+        document.getElementById("knife").style.animation = "slice 1s forwards";
+        document.getElementById("cutBtn").style.display = "none";
+        document.getElementById("tapToCutText").style.display = "none";
+        setTimeout(() => {
+            document.getElementById("cakeMsg").innerText = "A small bite for you 😋";
+            setTimeout(() => {
+                document.getElementById("cakeMsg").innerText = "Wait Supergirllll 😎✨";
+                setTimeout(() => { nextScene('photoScene'); startGallery(); }, 3000);
+            }, 3000);
+        }, 1000);
+    }
+
+    function startGallery() {
+        let idx = 0;
+        const img = document.getElementById("mainImg");
+        img.src = photos[idx];
+        const loop = setInterval(() => {
+            idx++;
+            if(idx >= photos.length) { clearInterval(loop); startFinal(); return; }
+            img.style.opacity = 0;
+            setTimeout(() => { img.src = photos[idx]; img.style.opacity = 1; }, 800);
+        }, 8000);
+    }
+
+    function startFinal() {
+        nextScene('finalScene');
+        heartMode = true; fireworkMode = true;
+        setTimeout(() => { 
+            document.getElementById("bgPhoto10").style.opacity = "1";
+            document.getElementById("lastPhoto9").style.opacity = "1";
+        }, 1500);
+
+        const locs = [{top:'5%', left:'5%'}, {top:'5%', right:'5%'}, {top:'35%', left:'4%'}, {top:'35%', right:'4%'}, {bottom:'25%', left:'5%'}, {bottom:'25%', right:'5%'}, {top:'18%', left:'18%'}, {top:'18%', right:'18%'}];
+        photos.slice(0, 8).forEach((s, i) => {
+            setTimeout(() => {
+                const el = document.createElement("img");
+                el.src = s; el.className = "collage-img";
+                const p = locs[i];
+                if(p.top) el.style.top = p.top; if(p.bottom) el.style.bottom = p.bottom;
+                if(p.left) el.style.left = p.left; if(p.right) el.style.right = p.right;
+                document.getElementById("collageArea").appendChild(el);
+                setTimeout(() => el.style.opacity = "1", 100);
+            }, i * 1800);
+        });
+    }
+
+    const cvs = document.getElementById("galaxy");
+    const x = cvs.getContext("2d");
+    cvs.width = window.innerWidth; cvs.height = window.innerHeight;
+    let stars = [];
+    for(let i=0; i<300; i++) stars.push({x: Math.random()*cvs.width, y: Math.random()*cvs.height, s: Math.random()*1.5});
+
+    function render() {
+        x.clearRect(0,0,cvs.width,cvs.height);
+        stars.forEach((s, i) => {
+            if(heartMode) {
+                let t = i/stars.length*Math.PI*2;
+                let hx = 16*Math.pow(Math.sin(t),3);
+                let hy = 13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+                s.x += (cvs.width/2 + hx*18 - s.x) * 0.003; 
+                s.y += (cvs.height/2 - hy*18 - s.y) * 0.003;
+            } else { s.y += 0.3; if(s.y > cvs.height) s.y = 0; }
+            x.fillStyle = "#fff"; x.fillRect(s.x, s.y, s.s, s.s);
+        });
+        
+        particles.forEach((p, i) => {
+            p.x += p.vx; p.y += p.vy; p.vy += 0.07; // Gravity
+            p.l -= 0.8; // Faster trail life
+            x.fillStyle = p.c; x.shadowBlur = 10; x.shadowColor = p.c;
+            x.beginPath(); x.arc(p.x, p.y, p.sz, 0, Math.PI*2); x.fill();
+            x.shadowBlur = 0;
+            if(p.l <= 0) particles.splice(i,1);
+        });
+
+        // REFINED FIREWORKS LOGIC
+        if(fireworkMode && Math.random() < 0.08) { // More frequent (0.08)
+            let px = Math.random()*cvs.width, py = Math.random()*cvs.height*0.5;
+            let colors = ["#ff5cc8","#ffd65c","#5ce1ff", "#ffffff", "#ff4d4d"];
+            let co = colors[Math.floor(Math.random()*colors.length)];
+            for(let i=0; i<60; i++) { // More particles per explosion
+                particles.push({
+                    x:px, y:py, 
+                    vx:(Math.random()-0.5)*12, 
+                    vy:(Math.random()-0.5)*12, 
+                    l:Math.random()*50 + 40, 
+                    c:co, 
+                    sz:Math.random()*3
+                });
+            }
+        }
+        requestAnimationFrame(render);
+    }
+    render();
+    window.onresize = () => { cvs.width = window.innerWidth; cvs.height = window.innerHeight; };
 </script>
 </body>
 </html>
