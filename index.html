@@ -46,6 +46,38 @@
     @keyframes slice { 0% { transform: rotate(-45deg) translate(0, 0); } 100% { transform: rotate(-45deg) translate(-150px, 100px); } }
     @keyframes vibrate { 0% { transform: translate(0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); } 100% { transform: translate(0); } }
     .shake-effect { animation: vibrate 0.1s linear infinite; }
+    /* ROTATION OVERLAY STYLE */
+    #rotateOverlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: #000;
+        z-index: 9999;
+        display: none; /* Hidden by default */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #ffd65c;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .phone-icon {
+        font-size: 50px;
+        margin-bottom: 20px;
+        animation: rotatePhone 2s infinite ease-in-out;
+    }
+
+    @keyframes rotatePhone {
+        0% { transform: rotate(0deg); }
+        50% { transform: rotate(90deg); }
+        100% { transform: rotate(0deg); }
+    }
+
+    /* Shows the message ONLY on mobile when held vertically */
+    @media screen and (max-width: 900px) and (orientation: portrait) {
+        #rotateOverlay { display: flex; }
+        .scene.active { display: none !important; }
+    }
 </style>
 </head>
 <body id="mainBody">
@@ -102,6 +134,13 @@
         </div>
         <div id="collageArea" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index: 10;"></div>
     </div>
+    <div id="rotateOverlay">
+    <div class="phone-icon">📱🔄</div>
+    <p style="font-size: 18px; text-align: center; padding: 20px; line-height: 1.5;">
+        Please rotate your phone to <b>Landscape</b> <br> 
+        for the best experience, <span style="font-family: 'Great Vibes'; font-size: 24px;">Dhanushaaaa</span> ✨
+    </p>
+</div>
 </div>
 
 <script>
