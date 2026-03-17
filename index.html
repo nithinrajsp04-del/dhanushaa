@@ -16,7 +16,7 @@ body {
     text-align: center;
 }
 
-canvas { position: fixed; top: 0; left: 0; pointer-events: none; }
+canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1; }
 
 .scene {
     position: absolute;
@@ -37,44 +37,51 @@ canvas { position: fixed; top: 0; left: 0; pointer-events: none; }
     background: linear-gradient(45deg,#ff5cc8,#ffd65c,#5ce1ff); 
     -webkit-background-clip:text; 
     -webkit-text-fill-color:transparent;
+    margin: 10px;
 }
 
 /* --- TEDDY DESIGN --- */
 .teddy-wrapper { position: relative; width: 220px; height: 280px; margin-bottom: 20px; }
 .t-ear { width: 50px; height: 50px; background: #d2b48c; border-radius: 50%; position: absolute; top: 0; z-index: 2;}
 .t-ear.left { left: 30px; } .t-ear.right { right: 30px; }
-.t-ear::after { content: ''; position: absolute; width: 25px; height: 25px; background: #ffffff; border-radius: 50%; top: 12px; left: 12px; }
-.t-head { width: 120px; height: 100px; background: #d2b48c; border-radius: 50%; position: absolute; top: 20px; left: 50px; z-index: 4; box-shadow: inset -8px -8px 15px rgba(0,0,0,0.15); }
+.t-head { width: 120px; height: 100px; background: #d2b48c; border-radius: 50%; position: absolute; top: 20px; left: 50px; z-index: 4; }
 .t-eye { width: 14px; height: 14px; background: #222; border-radius: 50%; position: absolute; top: 40px; }
 .t-eye.left { left: 30px; } .t-eye.right { right: 30px; }
 .t-muzzle { width: 50px; height: 40px; background: #ffffff; border-radius: 50%; position: absolute; top: 55px; left: 35px; }
-.t-nose { width: 16px; height: 10px; background: #5d4037; border-radius: 40%; position: absolute; top: 8px; left: 17px; }
-.t-body { width: 130px; height: 130px; background: #d2b48c; border-radius: 45% 45% 40% 40%; position: absolute; top: 100px; left: 45px; z-index: 3; }
-.t-belly { width: 80px; height: 90px; background: #ffffff; border-radius: 50%; position: absolute; top: 25px; left: 25px; opacity: 0.9; }
-.t-arm { width: 40px; height: 80px; background: #d2b48c; border-radius: 20px; position: absolute; top: 115px; z-index: 2; transform-origin: top; }
-.t-arm.left { left: 15px; transform: rotate(25deg); }
-.t-arm.right { right: 15px; transform: rotate(-25deg); }
-.t-leg { width: 55px; height: 75px; background: #d2b48c; border-radius: 25px; position: absolute; bottom: 5px; z-index: 5; }
-.t-leg.left { left: 35px; transform: rotate(-10deg); }
-.t-leg.right { right: 35px; transform: rotate(10deg); }
-.t-leg::after { content: ''; position: absolute; width: 35px; height: 35px; background: #ffffff; border-radius: 50%; bottom: 10px; left: 10px; }
-
-@keyframes waveHands { 0%, 100% { transform: rotate(25deg); } 50% { transform: rotate(125deg); } }
+.t-body { width: 130px; height: 130px; background: #d2b48c; border-radius: 45%; position: absolute; top: 100px; left: 45px; z-index: 3; }
 
 /* --- BUTTONS --- */
-.btn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 25px; cursor: pointer; font-family: 'Poppins'; font-weight: bold; margin-top: 20px; z-index: 20; }
+.btn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; margin-top: 20px; z-index: 20; }
 #yesBtn { background: #4B79A1; color: white; }
 #noBtn { background: #333; color: #777; position: absolute; }
-#startBdayBtn { background: #C84B81; color: white; }
-#cutBtn { background: #ffd65c; box-shadow: 0 0 15px #ffd65c; }
+#cutBtn { background: #ffd65c; box-shadow: 0 0 15px #ffd65c; color: black; }
 
 /* --- SLIDESHOW --- */
-#mainImg { max-width: 85%; max-height: 80%; border: 8px solid white; border-radius: 15px; transition: all 0.8s ease-in-out; }
-.collage-img { position: absolute; width: 160px; height: 160px; object-fit: cover; border: 4px solid white; border-radius: 10px; z-index: 5; opacity: 0; animation: appear 1.5s forwards; }
+.img-container {
+    width: 80%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#mainImg { 
+    max-width: 100%; 
+    max-height: 100%; 
+    border: 10px solid white; 
+    border-radius: 15px; 
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    transition: opacity 0.8s ease-in-out;
+    background: #222; /* Placeholder if img fails */
+}
+
+.collage-img { 
+    position: absolute; width: 150px; height: 150px; 
+    object-fit: cover; border: 4px solid white; border-radius: 10px; 
+    z-index: 5; opacity: 0; animation: appear 1.5s forwards; 
+}
 
 @keyframes appear { to { opacity: 1; } }
-@keyframes flicker { from { transform: scale(1) translateX(-50%); } to { transform: scale(1.1) translateX(-50%); } }
-@keyframes shake { 0% { transform: translate(3px, 3px); } 50% { transform: translate(-3px, -3px); } 100% { transform: translate(0, 0); } }
+@keyframes sliceAnim { 0% { transform: translate(0,0); } 100% { transform: translate(-100px, 100px); } }
 </style>
 </head>
 <body>
@@ -82,52 +89,32 @@ canvas { position: fixed; top: 0; left: 0; pointer-events: none; }
 <canvas id="canvas"></canvas>
 
 <audio id="music" loop><source src="music.mp3"></audio>
-<audio id="shotSound"><source src="https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3"></audio>
 
 <div id="introScene" class="scene active">
     <h1 class="title">Dhanushaaaa ✨</h1>
-    <p>Wait, I have a surprise for you... Ready?</p>
-    <div id="teddyPrank" class="teddy-wrapper" style="display:none; transform: scale(0.85);">
-        <div class="t-ear left"></div><div class="t-ear right"></div>
-        <div class="t-head"><div class="t-eye left"></div><div class="t-eye right"></div><div class="t-muzzle"><div class="t-nose"></div></div></div>
-        <div class="t-arm left" id="lArm"></div><div class="t-arm right" id="rArm"></div>
-        <div class="t-body"><div class="t-belly"></div><div id="gun" style="width:45px; height:25px; background:#222; position:absolute; right:-25px; top:35px; display:none; border-radius:4px;"></div></div>
-        <div class="t-leg left"></div><div class="t-leg right"></div>
-    </div>
-    <div id="btnContainer" style="position:relative; width:300px; height:100px;">
-        <button id="yesBtn" class="btn" onclick="sayYes()">YES</button>
+    <p>Ready for your surprise?</p>
+    <div id="btnContainer" style="position:relative; width:300px; height:150px;">
+        <button id="yesBtn" class="btn" onclick="startSurprise()">YES</button>
         <button id="noBtn" class="btn">NO</button>
     </div>
 </div>
 
-<div id="candleScene" class="scene">
-    <div id="countdown" style="font-size: 80px; font-family: 'Great Vibes'; color: #ffd65c; margin-bottom: 10px;">✨</div>
-    <div class="candle-body" style="width: 25px; height: 90px; background: linear-gradient(to right, #e0e0e0, #ffffff, #e0e0e0); border-radius: 4px; position: relative;">
-        <div id="flame" class="flame-container" onclick="blowOut()" style="display:none; position: absolute; top: -45px; left: 50%; transform: translateX(-50%); width: 30px; height: 50px; cursor: pointer; animation: flicker 0.1s infinite alternate;">
-            <div style="width: 100%; height: 100%; background: radial-gradient(ellipse at bottom, #fff, #ffcc00 40%, #ff6600 70%, transparent 90%); border-radius: 50% 50% 20% 20%; filter: blur(1px);"></div>
-        </div>
-    </div>
-    <button id="startBdayBtn" class="btn" onclick="triggerCountdown()">START BIRTHDAY ✨</button>
-    <p id="blowText" style="font-size: 28px; color: #ffd65c; font-weight: bold; font-family: 'Great Vibes'; margin-top: 25px; display:none;">Tap the flame to blow it out!</p>
-</div>
-
 <div id="cakeScene" class="scene">
     <h2 class="title" style="font-size: 40px;">Time to cut your Cake! 🎂</h2>
-    <div style="width: 220px; height: 110px; background: pink; border-radius: 15px; position: relative; border: 4px solid #fff; margin-bottom: 20px;">
-        <div id="knife" style="width: 80px; height: 10px; background: silver; position: absolute; top: -40px; right: -60px; transform: rotate(-45deg); display: none;"></div>
-    </div>
+    <div style="width: 200px; height: 100px; background: #ffc0cb; border-radius: 10px; border: 4px solid white; margin: 20px;"></div>
     <button id="cutBtn" class="btn" onclick="doCut()">CUT THE CAKE</button>
-    <div id="cakeMsg" style="margin-top: 25px; font-family: 'Great Vibes'; font-size: 45px;"></div>
+    <div id="cakeMsg" style="margin-top: 20px; font-size: 30px; font-family: 'Great Vibes';"></div>
 </div>
 
 <div id="photoScene" class="scene">
-    <img id="mainImg">
+    <div class="img-container">
+        <img id="mainImg" src="" alt="Birthday Moment">
+    </div>
 </div>
 
 <div id="finalScene" class="scene">
-    <img id="lastPhoto" src="photo10.jpg" style="max-width: 70%; max-height: 60%; opacity: 0.35; border-radius: 20px;">
-    <h1 class="title" style="font-size: 70px;">Happy Birthday Baddie 🎉</h1>
-    <div id="collageArea" style="width:100%; height:100%; position:absolute; top:0; left:0;"></div>
+    <h1 class="title" style="font-size: 60px;">Happy Birthday Baddie 🎉</h1>
+    <div id="collageArea" style="width:100%; height:100%; position:absolute; top:0; left:0; pointer-events:none;"></div>
 </div>
 
 <script>
@@ -137,168 +124,128 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let stars = [];
-let fireworks = [];
+let particles = [];
 let heartMode = false;
 let fireworkMode = false;
 
-// Initialize Stars
-for(let i=0; i<800; i++) {
-    stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        color: "white",
-        size: Math.random() * 1.5
-    });
-}
-
-class Particle {
-    constructor(x, y, color) {
-        this.x = x; this.y = y; this.color = color;
-        this.velocity = {
-            x: (Math.random() - 0.5) * 8,
-            y: (Math.random() - 0.5) * 8
-        };
-        this.opacity = 1;
-    }
-    draw() {
-        ctx.save();
-        ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-    }
-    update() {
-        this.x += this.velocity.x;
-        this.y += this.velocity.y;
-        this.opacity -= 0.01;
-    }
+// Star setup
+for(let i=0; i<400; i++) {
+    stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*2 });
 }
 
 function createFirework() {
-    if (!fireworkMode) return;
+    if(!fireworkMode) return;
     const x = Math.random() * canvas.width;
     const y = Math.random() * (canvas.height * 0.5);
-    const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-    for (let i = 0; i < 40; i++) {
-        fireworks.push(new Particle(x, y, color));
+    const color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+    for(let i=0; i<30; i++) {
+        particles.push({
+            x: x, y: y,
+            vx: (Math.random()-0.5) * 10,
+            vy: (Math.random()-0.5) * 10,
+            life: 1.0,
+            color: color
+        });
     }
 }
 
 function animate() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+    
     stars.forEach((s, i) => {
         if(heartMode) {
             let t = i/stars.length*Math.PI*2;
             let hx = 16*Math.pow(Math.sin(t),3);
             let hy = 13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
-            s.x += (canvas.width/2 + hx*18 - s.x) * 0.01; 
-            s.y += (canvas.height/2 - hy*18 - s.y) * 0.01;
+            s.x += (canvas.width/2 + hx*15 - s.x) * 0.02;
+            s.y += (canvas.height/2 - hy*15 - s.y) * 0.02;
         } else {
-            s.y += 0.2;
-            if(s.y > canvas.height) s.y = 0;
+            s.y += 0.5; if(s.y > canvas.height) s.y = 0;
         }
-        ctx.fillStyle = s.color;
+        ctx.fillStyle = "white";
         ctx.fillRect(s.x, s.y, s.size, s.size);
     });
 
-    fireworks.forEach((p, i) => {
-        if (p.opacity <= 0) {
-            fireworks.splice(i, 1);
-        } else {
-            p.update();
-            p.draw();
-        }
+    particles.forEach((p, i) => {
+        p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+        if(p.life <= 0) particles.splice(i, 1);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.fillRect(p.x, p.y, 3, 3);
     });
+    ctx.globalAlpha = 1;
 
-    if (fireworkMode && Math.random() < 0.05) createFirework();
+    if(fireworkMode && Math.random() < 0.08) createFirework();
     requestAnimationFrame(animate);
 }
 
-// Logic for Scene Transitions
 function showScene(id) {
     document.querySelectorAll(".scene").forEach(s => s.classList.remove("active"));
     document.getElementById(id).classList.add("active");
 }
 
-function sayYes() {
-    document.getElementById("btnContainer").style.display = "none";
-    document.getElementById("teddyPrank").style.display = "block";
-    setTimeout(() => { showScene("candleScene"); }, 2000);
-}
-
-function triggerCountdown() {
-    document.getElementById("startBdayBtn").style.display = "none";
-    let count = 5;
-    const cd = document.getElementById("countdown");
-    const timer = setInterval(() => {
-        count--;
-        cd.innerText = count;
-        if(count <= 0) {
-            clearInterval(timer);
-            cd.innerText = "❤️";
-            document.getElementById("flame").style.display = "block";
-            document.getElementById("blowText").style.display = "block";
-        }
-    }, 1000);
-}
-
-function blowOut() {
-    document.getElementById("flame").style.display = "none";
-    const music = document.getElementById("music");
-    music.play();
-    setTimeout(() => { showScene("cakeScene"); }, 2000);
+function startSurprise() {
+    document.getElementById("music").play();
+    showScene("cakeScene");
 }
 
 function doCut() {
-    document.getElementById("knife").style.display = "block";
-    document.getElementById("knife").style.animation = "sliceAnim 1s forwards";
+    document.getElementById("cakeMsg").innerText = "Yay! Get Ready...";
     setTimeout(() => {
-        document.getElementById("cakeMsg").innerHTML = "A small bite for you 😋";
-        setTimeout(() => { showScene("photoScene"); startSlideshow(); }, 2000);
-    }, 1000);
+        showScene("photoScene");
+        startSlideshow();
+    }, 1500);
 }
 
-let photoFiles = ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg", "photo6.jpg", "photo7.jpg", "photo8.jpg", "photo9.jpg"];
+// SLIDESHOW LOGIC
+const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg", "photo6.jpg", "photo7.jpg", "photo8.png", "photo9.pngg"];
 let pIdx = 0;
 
 function startSlideshow() {
     const img = document.getElementById("mainImg");
-    img.src = photoFiles[pIdx];
-    const slide = setInterval(() => {
+    img.src = photos[pIdx];
+    
+    const interval = setInterval(() => {
         pIdx++;
-        if(pIdx >= photoFiles.length) {
-            clearInterval(slide);
+        if(pIdx >= photos.length) {
+            clearInterval(interval);
             startFinal();
             return;
         }
         img.style.opacity = 0;
-        setTimeout(() => { img.src = photoFiles[pIdx]; img.style.opacity = 1; }, 800);
+        setTimeout(() => {
+            img.src = photos[pIdx];
+            img.style.opacity = 1;
+        }, 800);
     }, 8000); // 8 SECONDS
 }
 
 function startFinal() {
     showScene("finalScene");
     heartMode = true;
-    fireworkMode = true; // TRIGGER FIREWORKS HERE
+    fireworkMode = true;
+    
+    // Add small photos in corners
+    const area = document.getElementById("collageArea");
+    photos.forEach((p, i) => {
+        const cImg = document.createElement("img");
+        cImg.src = p;
+        cImg.className = "collage-img";
+        cImg.style.left = Math.random() * 80 + "%";
+        cImg.style.top = Math.random() * 80 + "%";
+        setTimeout(() => area.appendChild(cImg), i * 500);
+    });
 }
 
 // Prank No Button
 const noBtn = document.getElementById("noBtn");
 noBtn.addEventListener('mouseover', () => {
     noBtn.style.left = Math.random() * 200 + "px";
-    noBtn.style.top = (Math.random() * 60) - 30 + "px";
+    noBtn.style.top = (Math.random() * 100 - 50) + "px";
 });
 
 animate();
 </script>
-
-<style>
-@keyframes sliceAnim { 0% { right: -60px; top: -40px; } 100% { right: 80px; top: 50px; } }
-@keyframes flicker { from { transform: scale(1) translateX(-50%); } to { transform: scale(1.1) translateX(-50%); } }
-</style>
 </body>
 </html>
